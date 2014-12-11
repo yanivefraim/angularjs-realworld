@@ -4,20 +4,20 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     watch: {
-      realworlddemo:{
-        files: ['../real-world-demo/**/*.js', '!../real-world-demo/dist/**/*.*'],
-                tasks: ['realworlddemo'],
+      demo:{
+        files: ['../demo/**/*.js', '!../demo/dist/**/*.*'],
+                tasks: ['demo'],
                 options:{
                     nospawn: true
                 }
       }
     },
     concat: {
-      realworlddemo: {
+      demo: {
         files:{
-                '../real-world-demo/dist/dev/main.js': ['../real-world-demo/**/*module.js','../real-world-demo/temp/templates.js','../real-world-demo/*.js','../real-world-demo/**/*.js', '!../real-world-demo/dist/**/*.js'],
-                '../real-world-demo/dist/dev/index.html': ['../real-world-demo/index.html'],
-                '../real-world-demo/temp/templates.html': ['../real-world-demo/**/*.tpl.html']
+                '../demo/dist/dev/main.js': ['../demo/**/*module.js','../demo/temp/templates.js','../demo/*.js','../demo/**/*.js', '!../demo/dist/**/*.js'],
+                '../demo/dist/dev/index.html': ['../demo/index.html'],
+                '../demo/temp/templates.html': ['../demo/**/*.tpl.html']
               }
       }
     },
@@ -42,17 +42,17 @@ module.exports = function(grunt) {
                         removeStyleLinkTypeAttributes: true
                     }
                 },
-                src: ['../real-world-demo/temp/templates.html'],
-                dest: '../real-world-demo/temp/templates.js'
+                src: ['../demo/temp/templates.html'],
+                dest: '../demo/temp/templates.js'
             }
         },
          ngAnnotate: {
             options: {
                 // Task-specific options go here.
             },
-            realworlddemo: {
+            demo: {
                 files: {
-                    '../real-world-demo/dist/dev/main.js': ['../real-world-demo/dist/dev/main.js']
+                    '../demo/dist/dev/main.js': ['../demo/dist/dev/main.js']
                 }
             }
         }
@@ -68,11 +68,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('realworlddemo', ['concat:realworlddemo', 'html2js', 'ngAnnotate:realworlddemo']);
+  grunt.registerTask('demo', ['concat:demo', 'html2js', 'ngAnnotate:demo']);
 
   // Default task(s).
-  grunt.registerTask('realworlddemo_develop', 'realworlddemo develop', function(){
-    grunt.task.run(['watch:realworlddemo']);  
+  grunt.registerTask('demo_develop', 'demo develop', function(){
+    grunt.task.run(['watch:demo']);  
   });
 
 };
