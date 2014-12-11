@@ -1,6 +1,6 @@
 (function(){
-    angular.module('demo.timer')
-        .factory('timer', function(){
+    angular.module('app.timer')
+        .factory('timerService', function(){
 
         	var getData = function(){
 
@@ -10,3 +10,4 @@
         		get: getData
         	}
         });
+})();

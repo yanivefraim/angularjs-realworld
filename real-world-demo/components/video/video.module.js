@@ -1,3 +1,3 @@
 (function(){
-	angular.module('demo.video', []);
+	angular.module('app.video', []);
 })();

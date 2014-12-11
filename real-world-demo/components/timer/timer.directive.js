@@ -1,5 +1,5 @@
 (function(){
-	angular.module('demo.timer')
+	angular.module('app.timer')
 				.directive('demoTimer', demoTimer);
 
 
@@ -14,6 +14,7 @@
 	        },
 	        bindToController: true,
 	        controllerAs: 'timer'
+	    };
 	}	
 
 })();
