@@ -26,9 +26,16 @@ describe('directive: video', function() {
       it("should have video source set", function() {
         var isolated = element.isolateScope();
         expect(isolated.videoData.video).toBe("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4");
-        
+      });
+      it("should have a video element", function(){
+        var video = element.find('video');
+        expect(video.length).toBeGreaterThan(0);
+      });
+      it("video element should have correct source", function(){
+        var video = element.find('video');
+        var isolated = element.isolateScope();
+        expect(video.find('source')[0].getAttribute("src")).toBe(isolated.videoData.video);
       });
     });
-
 });
 
