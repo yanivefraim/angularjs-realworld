@@ -8,9 +8,10 @@
         'templates-main',
         'app.videoPage'
     ])
-    .run(["$templateCache", "$compile", "$rootScope", function($templateCache, $compile, $rootScope){
+    .run(["$templateCache", "$compile", "$rootScope", "callbackService", function($templateCache, $compile, $rootScope, callbackService){
 			var templatesHTML = $templateCache.get('demo-templates');
         	$compile(templatesHTML)($rootScope);	
+            callbackService.init();
 	}]);
 
 })();
@@ -27,7 +28,7 @@
 
 angular.module('templates-main', []).run(['$templateCache', function($templateCache) {
   $templateCache.put("demo-templates",
-    "<script type=text/ng-template id=timerTemplate.html><div>{{timer.time}}</div></script><script type=text/ng-template id=videoTemplate.html><video id=\"video\" controls=\"true\">\n" +
+    "<script type=text/ng-template id=timerTemplate.html><div style=\"height: 50px;\">{{timer.time}}</div></script><script type=text/ng-template id=videoTemplate.html><video id=\"video\" controls=\"true\">\n" +
     "            <source id=\"mp4\" ng-src=\"{{ videoDataUrlMp4 }}\" type=\"video/mp4\">\n" +
     "            <p>Your user agent does not support the HTML5 Video element.</p>\n" +
     "    </video></script><script type=text/ng-template id=videoPageTemplate.html><div>\n" +
@@ -65,13 +66,15 @@ angular.module('templates-main', []).run(['$templateCache', function($templateCa
 
 	function demoTimer(){
 		return{
-	        scope: {
-	            timerData: "="
-	        },
 	        templateUrl: "timerTemplate.html",
-	        controller: function(){
-
-	        },
+	        controller: ["$scope", function($scope){
+	        	var vm = this;
+        		$scope.$on('video.timeTick', function(event, message){
+        			$scope.$apply(function(){
+        				vm.time = message;	
+        			});
+        		});
+	        }],
 	        bindToController: true,
 	        controllerAs: 'timer'
 	    };
@@ -96,38 +99,67 @@ angular.module('templates-main', []).run(['$templateCache', function($templateCa
 	angular.module('app.video')
 				.directive('demoVideo', demoVideo);
 
-
 	function demoVideo(){
+		var currentTime = -1;
 		return{
 			scope:{
 				videoData: "="
 			},
 	        templateUrl: "videoTemplate.html",
 	        controller: ["$sce", "$scope", function($sce,$scope){
-
 				$scope.videoDataUrlMp4 = $sce.trustAsResourceUrl($scope.videoData.video);
-
-        		//videoService.get().then(function(data){
-        		//	vm.videoDataUrlMp4 = $sce.trustAsResourceUrl(data.video);//"http://pdl.vimeocdn.com/89496/595/203684545.mp4?token2=1418313891_4826d99475da5695f5d7999863fb212c&aksessionid=732c8c4ae38ae4aa"
-        		//});
 	        }],
+	        link: function(scope, element, attrs){
+	        	var video = element.find('video');
+	        	video.bind('timeupdate', function(){
+        			var time = parseInt(video[0].currentTime);
+        			if( time !== currentTime ){
+                        currentTime = time;
+                    	scope.$emit('video.timeTick', time);
+                    }
+	        	});
+	        }
 	        
 	    }
 	}	 
 
 })();
+(function(){
+    angular.module('app').factory('callbackService', callbackService);
 
+    function callbackService($rootScope){
+    	
+    	function init(){
+    		$rootScope.$on('video.timeTick', function(event, message){
+    			console.log('Pixel Fired: ' + message);
+    		});
+    	};
+    	return{
+    		init: init
+    	}	
+    }
+    callbackService.$inject = ["$rootScope"];
+})();
 (function(){
     angular.module('app')
         .factory('videoService', ["$http", function($http){
-        	var getData = function(){
-    			return $http.get('../../assets/data.json').then(function(res){
-    				return res.data;
-    			});
+        	var dataPromise = null;
+            var getData = function(){
+                if( dataPromise === null ){
+    		        dataPromise = $http.get('../../assets/data.json').then(function(res){
+                        return res.data;
+                    });
+    			};
+                return dataPromise;
         	};
 
+            var resetCache = function(){
+                dataPromise = null;
+            };
+
         	return{
-        		get: getData
+        		get: getData,
+                resetCache: resetCache
         	}
         }]);
 })();

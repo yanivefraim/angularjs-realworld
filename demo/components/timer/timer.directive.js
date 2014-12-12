@@ -5,12 +5,14 @@
 
 	function demoTimer(){
 		return{
-	        scope: {
-	            timerData: "="
-	        },
 	        templateUrl: "timerTemplate.html",
-	        controller: function(){
-
+	        controller: function($scope){
+	        	var vm = this;
+        		$scope.$on('video.timeTick', function(event, message){
+        			$scope.$apply(function(){
+        				vm.time = message;	
+        			});
+        		});
 	        },
 	        bindToController: true,
 	        controllerAs: 'timer'
