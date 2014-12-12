@@ -5,6 +5,6 @@ angular.module('templates-main', []).run(['$templateCache', function($templateCa
     "            <p>Your user agent does not support the HTML5 Video element.</p>\n" +
     "    </video></script><script type=text/ng-template id=videoPageTemplate.html><div>\n" +
     "		<demo-timer></demo-timer>\n" +
-    "   		<demo-video video-data=\"videoPageCtrl.videoData\"><demo-video>	\n" +
+    "   		<demo-video video-data=\"videoPageCtrl.videoData\"><demo-video>\n" +
     "	</div></script>");
 }]);

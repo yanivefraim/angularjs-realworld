@@ -89,4 +89,8 @@ module.exports = function(grunt) {
     grunt.task.run(['watch:demo']);  
   });
 
+  grunt.registerTask('demo_test', 'Run demo unitests', function(){
+        grunt.task.run(['karma:demo:start']);
+    });
+
 };
