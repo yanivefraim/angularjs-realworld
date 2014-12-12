@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     concat: {
       demo: {
         files:{
-                '../demo/dist/dev/main.js': ['../demo/**/*module.js','../demo/temp/templates.js','../demo/*.js','../demo/**/*.js', '!../demo/dist/**/*.js'],
+                '../demo/dist/dev/main.js': ['../demo/**/*module.js','../demo/temp/templates.js','../demo/*.js','../demo/**/*.js', '!../demo/dist/**/*.js','!../demo/**/*spec.js'],
                 '../demo/dist/dev/index.html': ['../demo/index.html'],
                 '../demo/temp/templates.html': ['../demo/**/*.tpl.html']
               }
@@ -55,7 +55,19 @@ module.exports = function(grunt) {
                     '../demo/dist/dev/main.js': ['../demo/dist/dev/main.js']
                 }
             }
-        }
+        },
+        karma: {
+            options: {
+                browsers: ['PhantomJS'],
+                reporters: 'dots'
+            },
+            demo:{
+                configFile: '../demo/demo_tests.config.js',
+                browsers: ['Chrome'],
+                background: false,
+                singleRun: false
+            }
+        },
   });
 
   grunt.loadNpmTasks('grunt-contrib-compass');
@@ -67,6 +79,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html2js');
 
   grunt.loadNpmTasks('grunt-contrib-watch');
+
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('demo', ['concat:demo', 'html2js', 'ngAnnotate:demo']);
 
