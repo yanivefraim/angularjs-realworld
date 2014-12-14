@@ -145,7 +145,7 @@ module.exports = function(grunt) {
             },
             demo:{
                 options:{
-                    sassDir: '../demo/temp',
+                    sassDir: '../demo/css',
                     cssDir: '../demo/dist/dev'
                 }
             }
