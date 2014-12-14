@@ -5,5 +5,4 @@
 		var vm = this;
 		vm.videoData = videoData;
 	}
-
 })();
