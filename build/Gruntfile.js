@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     watch: {
       demo:{
-        files: ['../demo/**/*.js', '!../demo/dist/**/*.*'],
+        files: ['../demo/**/*.js', '../demo/**/*.scss', '!../demo/dist/**/*.*'],
                 tasks: ['demo'],
                 options:{
                     nospawn: true
@@ -137,7 +137,19 @@ module.exports = function(grunt) {
                 }
             }
         },
-
+         compass: {
+            options: {
+                environment: 'production',
+                noLineComments: true,
+                outputStyle: 'expanded'
+            },
+            demo:{
+                options:{
+                    sassDir: '../demo/temp',
+                    cssDir: '../demo/dist/dev'
+                }
+            }
+        },
   });
 
   grunt.loadNpmTasks('grunt-contrib-compass');
@@ -160,7 +172,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
-  grunt.registerTask('demo', ['concat:demo', 'html2js', 'ngAnnotate:demo']);
+  grunt.registerTask('demo', ['concat:demo', 'html2js', 'ngAnnotate:demo', 'compass:demo']);
 
   // Default task(s).
   grunt.registerTask('demo_develop', 'demo develop', function(){
