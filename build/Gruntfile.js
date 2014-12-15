@@ -8,7 +8,8 @@ module.exports = function(grunt) {
         files: ['../demo/**/*.js', '../demo/**/*.scss', '!../demo/dist/**/*.*'],
                 tasks: ['demo'],
                 options:{
-                    nospawn: true
+                    nospawn: true,
+                    livereload: true
                 }
       }
     },
